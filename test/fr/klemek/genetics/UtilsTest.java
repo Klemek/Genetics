@@ -21,12 +21,12 @@ public class UtilsTest {
         assertLesser(realDist * 1.01f, dist);
     }
 
-    public void assertGreater(float ref, float value) {
+    private void assertGreater(float ref, float value) {
         if (value <= ref)
             fail(String.format("%f is lesser than %f", value, ref));
     }
 
-    public void assertLesser(float ref, float value) {
+    private void assertLesser(float ref, float value) {
         if (value >= ref)
             fail(String.format("%f is greater than %f", value, ref));
     }

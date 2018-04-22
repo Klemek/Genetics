@@ -1,7 +1,5 @@
 package fr.klemek.genetics;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
@@ -29,7 +27,7 @@ public final class Utils {
         }
     }
 
-    public static void shuffle(int[] ar) {
+    static void shuffle(int[] ar) {
         // Implementing Fisher–Yates shuffle
         Random rnd = ThreadLocalRandom.current();
         for (int i = ar.length - 1; i > 0; i--) {
@@ -48,7 +46,7 @@ public final class Utils {
         return out;
     }
 
-    public static int[] indexes(int size) {
+    static int[] indexes(int size) {
         int[] out = new int[size];
         for (int i = 0; i < size; i++)
             out[i] = i;
@@ -72,20 +70,20 @@ public final class Utils {
      * COORDINATES
      */
 
-    private final static float LATITUTE_FACTOR = 110.574f;
-    private final static float LONGITUTE_FACTOR = 111.320f;
+    private static final float LATITUTE_FACTOR = 110.574f;
+    private static final float LONGITUTE_FACTOR = 111.320f;
 
-    private final static float LATITUTE_FACTOR_APROX = 918f / 11.93f;
-    private final static float LONGITUTE_FACTOR_APROX = 881f / 7.98f;
+    private static final float LATITUTE_FACTOR_APPROX = 918f / 11.93f;
+    private static final float LONGITUTE_FACTOR_APPROX = 881f / 7.98f;
 
-    private final static int EARTH_RADIUS = 6371; //km
+    private static final int EARTH_RADIUS = 6371; //km
 
-    public static float distance(float[] coords1, float[] coords2) {
+    private static float distance(float[] coords1, float[] coords2) {
         return distance(new float[]{coords2[0] - coords1[0], coords2[1] - coords1[1]});
     }
 
-    public static float geoDistance(float[] coords1, float[] coords2, boolean aproximate) {
-        if (aproximate)
+    public static float geoDistance(float[] coords1, float[] coords2, boolean approximate) {
+        if (approximate)
             return distance(coordinatesToKm(coords1, true), coordinatesToKm(coords2, true));
 
         double phi1 = Math.toRadians(coords1[0]);
@@ -100,16 +98,16 @@ public final class Utils {
         return (float) (EARTH_RADIUS * c);
     }
 
-    public static float distance(float[] coords) {
+    private static float distance(float[] coords) {
         return (float) Math.sqrt(Math.pow(coords[0], 2) + Math.pow(coords[1], 2));
     }
 
-    public static float[] coordinatesToKm(float[] coordinates, boolean aproximate) {
+    public static float[] coordinatesToKm(float[] coordinates, boolean approximate) {
         float x;
         float y;
-        if (aproximate) {
-            x = coordinates[0] * LATITUTE_FACTOR_APROX;
-            y = coordinates[1] * LONGITUTE_FACTOR_APROX;
+        if (approximate) {
+            x = coordinates[0] * LATITUTE_FACTOR_APPROX;
+            y = coordinates[1] * LONGITUTE_FACTOR_APPROX;
         } else {
             x = coordinates[0] * LATITUTE_FACTOR;
             y = (float) (coordinates[1] * LONGITUTE_FACTOR * Math.cos(Math.toRadians(coordinates[0])));
@@ -129,7 +127,7 @@ public final class Utils {
         return out;
     }
 
-    public static boolean randBoolean(float successPercentage) {
+    static boolean randBoolean(float successPercentage) {
         return ThreadLocalRandom.current().nextFloat() < successPercentage;
     }
 
@@ -148,11 +146,11 @@ public final class Utils {
      * OTHER
      */
 
-    public static <T> T instantiate(Class<T> c) {
+    static <T> T instantiate(Class<T> c) {
         try {
             return c.getConstructor().newInstance();
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("No default constructor found in class " + c.getSimpleName());
         }
     }
 }

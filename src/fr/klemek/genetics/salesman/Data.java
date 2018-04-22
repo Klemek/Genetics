@@ -16,29 +16,29 @@ final class Data {
      * PARAMETERS
      */
 
-    private final static boolean APROXIMATE = false;
+    private static final boolean APPROXIMATE = false;
 
-    public final static int POPULATION_SIZE = 10000;
-    public final static float DEFAULT_MUTATION = .3f;
-    public final static int HIGH_STAGNATION = 25;
-    public final static int MAX_STAGNATION = 50;
-    public final static boolean MUTATE_ONLY_CHILDREN = true;
+    static final int POPULATION_SIZE = 10000;
+    static final float DEFAULT_MUTATION = .3f;
+    static final int HIGH_STAGNATION = 25;
+    static final int MAX_STAGNATION = 50;
+    static final boolean MUTATE_ONLY_CHILDREN = true;
 
-    public final static float RELOAD_THRESOLD = 3095.95f; //0 for once or set for retry on fail
+    static final float RELOAD_THRESHOLD = 3095.95f; //0 for once or set for retry on fail
 
-    private final static int FRAME_PER_SECOND = 60; //approximate
-    public final static float GENERATION_PER_SECOND = -1; //-1 for infinite
+    private static final int FRAME_PER_SECOND = 60; //approximate
+    static final float GENERATION_PER_SECOND = -1; //-1 for infinite
 
-    public final static int FRAME_WAIT = 1000 / FRAME_PER_SECOND;
-    public final static int THREAD_SLEEP = GENERATION_PER_SECOND <= 0 ? 0 : (int) (1000 / GENERATION_PER_SECOND);
+    static final int FRAME_WAIT = 1000 / FRAME_PER_SECOND;
+    static final int THREAD_SLEEP = GENERATION_PER_SECOND <= 0 ? 0 : (int) (1000 / GENERATION_PER_SECOND);
 
     /*
      * CITY DATA
      */
 
-    public final static int DATA_SIZE = 20;
+    static final int DATA_SIZE = 20;
 
-    public final static String[] CITY_NAMES = {
+    static final String[] CITY_NAMES = {
             "NICE",            // 0
             "MARSEILLE",    // 1
             "CAEN",            // 2
@@ -61,7 +61,7 @@ final class Data {
             "ROUEN"       // 19
     };
 
-    private final static float[][] CITY_COORDINATES = {
+    private static final float[][] CITY_COORDINATES = {
             {43.42f, 7.16f},        // 1 : NICE
             {43.18f, 5.22f},        // 2 : MARSEILLE
             {49.11f, -0.62f},        // 3 : CAEN
@@ -84,16 +84,16 @@ final class Data {
             {49.26f, 1.05f}        // 20 : ROUEN
     };
 
-    private final static HashMap<Pair<Byte>, Float> distances = new HashMap<>();
+    private static final HashMap<Pair<Byte>, Float> distances = new HashMap<>();
 
-    public static float distanceBetweenCities(byte city1, byte city2) {
+    static float distanceBetweenCities(byte city1, byte city2) {
         Pair<Byte> key = new Pair<>(city1, city2);
         if (!distances.containsKey(key))
-            distances.put(key, Utils.geoDistance(CITY_COORDINATES[city1], CITY_COORDINATES[city2], APROXIMATE));
+            distances.put(key, Utils.geoDistance(CITY_COORDINATES[city1], CITY_COORDINATES[city2], APPROXIMATE));
         return distances.get(key);
     }
 
-    public static void loadDistances() {
+    static void loadDistances() {
         for (byte city1 = 0; city1 < Data.DATA_SIZE - 1; city1++) {
             for (byte city2 = (byte) (city1 + 1); city2 < Data.DATA_SIZE; city2++) {
                 distanceBetweenCities(city1, city2);
@@ -101,11 +101,11 @@ final class Data {
         }
     }
 
-    private final static HashMap<Byte, float[]> positions = new HashMap<>();
+    private static final HashMap<Byte, float[]> positions = new HashMap<>();
 
-    public static float[] cityPosition(byte city) {
+    static float[] cityPosition(byte city) {
         if (!positions.containsKey(city))
-            positions.put(city, Utils.coordinatesToKm(CITY_COORDINATES[city], APROXIMATE));
+            positions.put(city, Utils.coordinatesToKm(CITY_COORDINATES[city], APPROXIMATE));
         return positions.get(city);
     }
 
@@ -113,20 +113,20 @@ final class Data {
      * COLORS
      */
 
-    public static final Color BACKGROUND_COLOR = Color.WHITE;
+    static final Color BACKGROUND_COLOR = Color.WHITE;
 
-    public static final Color CITIES_COLOR = Utils.colorFromHex("#263238");
+    static final Color CITIES_COLOR = Utils.colorFromHex("#263238");
 
-    public static final Color SALESMAN_COLOR = Utils.colorFromHex("#37474F");
+    static final Color SALESMAN_COLOR = Utils.colorFromHex("#37474F");
 
-    public static final Color TEXT_OPTIMAL_COLOR = Utils.colorFromHex("#F44336");
-    public static final Color GRAPH_OPTIMAL_COLOR = Utils.colorFromHex("#EF5350");
+    static final Color TEXT_OPTIMAL_COLOR = Utils.colorFromHex("#F44336");
+    static final Color GRAPH_OPTIMAL_COLOR = Utils.colorFromHex("#EF5350");
 
-    public static final Color TEXT_MEAN_COLOR = Utils.colorFromHex("#E91E63");
-    public static final Color GRAPH_MEAN_COLOR = Utils.colorFromHex("#EC407A");
+    static final Color TEXT_MEAN_COLOR = Utils.colorFromHex("#E91E63");
+    static final Color GRAPH_MEAN_COLOR = Utils.colorFromHex("#EC407A");
 
-    public static final Color TEXT_MUTATION_COLOR = Utils.colorFromHex("#4CAF50");
-    public static final Color GRAPH_MUTATION_COLOR = Utils.colorFromHex("#66BB6A");
+    static final Color TEXT_MUTATION_COLOR = Utils.colorFromHex("#4CAF50");
+    static final Color GRAPH_MUTATION_COLOR = Utils.colorFromHex("#66BB6A");
 
-    public static final Color TEXT_INFO_COLOR = Utils.colorFromHex("#9E9E9E");
+    static final Color TEXT_INFO_COLOR = Utils.colorFromHex("#9E9E9E");
 }

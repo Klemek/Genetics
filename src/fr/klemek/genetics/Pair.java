@@ -3,8 +3,8 @@ package fr.klemek.genetics;
 import java.util.Objects;
 
 public class Pair<T> {
-    final T first;
-    final T second;
+    private final T first;
+    private final T second;
 
     public Pair(T first, T second) {
         this.first = first;

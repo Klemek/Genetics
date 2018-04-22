@@ -26,11 +26,11 @@ class Panel extends JPanel {
     private float minY;
     private float maxY;
 
-    private final Laboratory<Salesman> lab;
+    private final transient Laboratory<Salesman> lab;
 
     //constructor
 
-    public Panel(Laboratory<Salesman> lab) {
+    Panel(Laboratory<Salesman> lab) {
         this.lab = lab;
         this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         this.setBackground(Data.BACKGROUND_COLOR);
@@ -54,6 +54,7 @@ class Panel extends JPanel {
         centerY = (maxY + minY) / 2f;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

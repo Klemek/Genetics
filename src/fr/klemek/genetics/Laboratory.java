@@ -56,7 +56,7 @@ public class Laboratory<T extends Subject> {
         return bestScoreHistory;
     }
 
-    float getCurrentBestScore() {
+    private float getCurrentBestScore() {
         return bestScoreHistory.get(bestScoreHistory.size() - 1);
     }
 
@@ -114,10 +114,11 @@ public class Laboratory<T extends Subject> {
     }
 
     public T getBest() {
+        //noinspection unchecked
         return (T) Laboratory.getBest(population);
     }
 
-    float getMeanScore() {
+    private float getMeanScore() {
         Subject[] population2 = population.clone();
         float sum = 0f;
         int total = 0;

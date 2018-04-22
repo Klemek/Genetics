@@ -21,7 +21,7 @@ public class Salesman implements Subject {
         this(false);
     }
 
-    public Salesman(boolean empty) {
+    private Salesman(boolean empty) {
         if (empty) {
             this.path = new byte[Data.DATA_SIZE];
             Utils.fill(this.path, (byte) -1);
@@ -34,15 +34,9 @@ public class Salesman implements Subject {
         this.distance = 0f;
     }
 
-    public Salesman(byte[] path) {
-        this.path = path;
-        this.valid = false;
-        this.distance = 0f;
-    }
-
     //accessors
 
-    public byte[] getPath() {
+    byte[] getPath() {
         return path;
     }
 
@@ -89,11 +83,7 @@ public class Salesman implements Subject {
         valid = true;
         ArrayList<Byte> past = new ArrayList<>();
         for (byte city : this.path) {
-            if (city < 0 || city >= Data.DATA_SIZE) {
-                valid = false;
-                break;
-            }
-            if (past.contains(city)) {
+            if (city < 0 || city >= Data.DATA_SIZE || past.contains(city)) {
                 valid = false;
                 break;
             }

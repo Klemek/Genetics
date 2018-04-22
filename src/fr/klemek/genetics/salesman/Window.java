@@ -17,7 +17,7 @@ class Window extends JFrame {
         this.setLaboratory(lab);
     }
 
-    public void setLaboratory(Laboratory<Salesman> lab) {
+    private void setLaboratory(Laboratory<Salesman> lab) {
         if (p != null)
             this.remove(p);
         p = new Panel(lab);
@@ -57,7 +57,7 @@ class Window extends JFrame {
                     Thread.sleep(Data.THREAD_SLEEP);
                 }
             }
-        } while (Data.RELOAD_THRESOLD > 0 && lab.getBest().score() >= Data.RELOAD_THRESOLD);
+        } while (Data.RELOAD_THRESHOLD > 0 && lab.getBest().score() >= Data.RELOAD_THRESHOLD);
 
     }
 }
