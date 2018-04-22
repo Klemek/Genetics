@@ -6,17 +6,23 @@ import javax.swing.*;
 
 class Window extends JFrame {
 
+    private Panel p;
+
     private Window(Laboratory<Salesman> lab) {
         this.setLocation(0, 0);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         this.setTitle("Traveling Salesman solution by genetics");
 
-        Panel panel = new Panel(lab);
+        this.setLaboratory(lab);
+    }
 
-        this.add(panel);
+    public void setLaboratory(Laboratory<Salesman> lab) {
+        if (p != null)
+            this.remove(p);
+        p = new Panel(lab);
+        this.add(p);
         this.pack();
-
         this.setVisible(true);
     }
 
@@ -28,22 +34,17 @@ class Window extends JFrame {
         Data.loadDistances();
 
         do {
-            if (w != null) {
-                w.setVisible(false);
-                w.dispose();
-            }
-
             lab = new Laboratory<>(Salesman.class,
                     Data.POPULATION_SIZE, Data.DEFAULT_MUTATION,
                     Data.HIGH_STAGNATION, Data.MAX_STAGNATION,
                     Data.MUTATE_ONLY_CHILDREN);
 
-            w = new Window(lab);
-
-            w.repaint();
+            if (w == null)
+                w = new Window(lab);
+            else
+                w.setLaboratory(lab);
 
             long t0 = System.currentTimeMillis();
-
 
             while (!lab.shouldStop()) {
                 lab.nextGeneration();
