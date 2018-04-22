@@ -44,11 +44,11 @@ class Panel extends JPanel {
         maxX = Float.MIN_VALUE;
         minY = Float.MAX_VALUE;
         maxY = Float.MIN_VALUE;
-        for (int c = 0; c < Data.DATA_SIZE; c++) {
-            minX = Math.min(minX, Data.cityCoordinatesKm(c)[1]);
-            maxX = Math.max(maxX, Data.cityCoordinatesKm(c)[1]);
-            minY = Math.min(minY, Data.cityCoordinatesKm(c)[0]);
-            maxY = Math.max(maxY, Data.cityCoordinatesKm(c)[0]);
+        for (byte c = 0; c < Data.DATA_SIZE; c++) {
+            minX = Math.min(minX, Data.cityPosition(c)[1]);
+            maxX = Math.max(maxX, Data.cityPosition(c)[1]);
+            minY = Math.min(minY, Data.cityPosition(c)[0]);
+            maxY = Math.max(maxY, Data.cityPosition(c)[0]);
         }
         centerX = (maxX + minX) / 2f;
         centerY = (maxY + minY) / 2f;
@@ -145,22 +145,22 @@ class Panel extends JPanel {
         g2.drawString(lab.mutateOnlyChildren() ? "Mutate only children" : "Mutate everyone but best", 10, 10 + (k++) * f);
 
         g2.setColor(Data.CITIES_COLOR);
-        for (int i = 0; i < Data.DATA_SIZE; i++) {
-            pos = getCityPosition(i, scale);
+        for (byte c = 0; c < Data.DATA_SIZE; c++) {
+            pos = getCityPosition(c, scale);
             g2.fillOval(pos[0] - 2, pos[1] - 2, 5, 5);
 
-            Rectangle2D stringBounds = g2.getFontMetrics().getStringBounds(Data.CITY_NAMES[i], g2);
-            g2.drawString(Data.CITY_NAMES[i], (int) (pos[0] - (stringBounds.getWidth()) / 2), (int) (pos[1] - stringBounds.getHeight()));
+            Rectangle2D stringBounds = g2.getFontMetrics().getStringBounds(Data.CITY_NAMES[c], g2);
+            g2.drawString(Data.CITY_NAMES[c], (int) (pos[0] - (stringBounds.getWidth()) / 2), (int) (pos[1] - stringBounds.getHeight()));
         }
 
 
     }
 
-    private int[] getCityPosition(int city, float scale) {
+    private int[] getCityPosition(byte city, float scale) {
         int wCenterX = w / 2;
         int wCenterY = h / 2;
-        int x = Math.round(wCenterX + (Data.cityCoordinatesKm(city)[1] - centerX) / scale);
-        int y = Math.round(wCenterY + (Data.cityCoordinatesKm(city)[0] - centerY) / -scale);
+        int x = Math.round(wCenterX + (Data.cityPosition(city)[1] - centerX) / scale);
+        int y = Math.round(wCenterY + (Data.cityPosition(city)[0] - centerY) / -scale);
         return new int[]{x, y};
     }
 

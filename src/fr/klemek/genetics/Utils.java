@@ -78,8 +78,26 @@ public final class Utils {
     private final static float LATITUTE_FACTOR_APROX = 918f / 11.93f;
     private final static float LONGITUTE_FACTOR_APROX = 881f / 7.98f;
 
+    private final static int EARTH_RADIUS = 6371; //km
+
     public static float distance(float[] coords1, float[] coords2) {
         return distance(new float[]{coords2[0] - coords1[0], coords2[1] - coords1[1]});
+    }
+
+    public static float geoDistance(float[] coords1, float[] coords2, boolean aproximate) {
+        if (aproximate)
+            return distance(coordinatesToKm(coords1, true), coordinatesToKm(coords2, true));
+
+        double phi1 = Math.toRadians(coords1[0]);
+        double phi2 = Math.toRadians(coords2[0]);
+        double dPhi = Math.toRadians(coords2[0] - coords1[0]);
+        double dLambda = Math.toRadians(coords2[1] - coords1[1]);
+        double a = Math.sin(dPhi / 2d) * Math.sin(dPhi / 2d)
+                + Math.cos(phi1) * Math.cos(phi2)
+                * Math.sin(dLambda / 2d) * Math.sin(dLambda / 2d);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return (float) (EARTH_RADIUS * c);
     }
 
     public static float distance(float[] coords) {

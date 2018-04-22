@@ -25,6 +25,8 @@ class Window extends JFrame {
         Laboratory<Salesman> lab;
         Window w = null;
 
+        Data.loadDistances();
+
         do {
             if (w != null) {
                 w.setVisible(false);

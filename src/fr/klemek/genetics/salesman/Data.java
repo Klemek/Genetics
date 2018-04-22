@@ -1,8 +1,10 @@
 package fr.klemek.genetics.salesman;
 
+import fr.klemek.genetics.Pair;
 import fr.klemek.genetics.Utils;
 
 import java.awt.*;
+import java.util.HashMap;
 
 final class Data {
 
@@ -22,7 +24,7 @@ final class Data {
     public final static int MAX_STAGNATION = 50;
     public final static boolean MUTATE_ONLY_CHILDREN = true;
 
-    public final static float RELOAD_THRESOLD = 3217.72f; //0 for once or set for retry on fail
+    public final static float RELOAD_THRESOLD = 3095.95f; //0 for once or set for retry on fail
 
     private final static int FRAME_PER_SECOND = 60; //approximate
     public final static float GENERATION_PER_SECOND = -1; //-1 for infinite
@@ -82,12 +84,29 @@ final class Data {
             {49.26f, 1.05f}        // 20 : ROUEN
     };
 
+    private final static HashMap<Pair<Byte>, Float> distances = new HashMap<>();
+
     public static float distanceBetweenCities(byte city1, byte city2) {
-        return Utils.distance(cityCoordinatesKm(city1), cityCoordinatesKm(city2));
+        Pair<Byte> key = new Pair<>(city1, city2);
+        if (!distances.containsKey(key))
+            distances.put(key, Utils.geoDistance(CITY_COORDINATES[city1], CITY_COORDINATES[city2], APROXIMATE));
+        return distances.get(key);
     }
 
-    public static float[] cityCoordinatesKm(int city) {
-        return Utils.coordinatesToKm(CITY_COORDINATES[city], APROXIMATE);
+    public static void loadDistances() {
+        for (byte city1 = 0; city1 < Data.DATA_SIZE - 1; city1++) {
+            for (byte city2 = (byte) (city1 + 1); city2 < Data.DATA_SIZE; city2++) {
+                distanceBetweenCities(city1, city2);
+            }
+        }
+    }
+
+    private final static HashMap<Byte, float[]> positions = new HashMap<>();
+
+    public static float[] cityPosition(byte city) {
+        if (!positions.containsKey(city))
+            positions.put(city, Utils.coordinatesToKm(CITY_COORDINATES[city], APROXIMATE));
+        return positions.get(city);
     }
 
     /*
