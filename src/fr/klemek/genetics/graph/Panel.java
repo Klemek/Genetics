@@ -1,4 +1,4 @@
-package fr.klemek.genetics.salesman;
+package fr.klemek.genetics.graph;
 
 import fr.klemek.genetics.Laboratory;
 
@@ -12,44 +12,20 @@ class Panel extends JPanel {
     //variables
 
 
-
     private int w;
     private int h;
 
-    private float centerX;
-    private float centerY;
-    private float minX;
-    private float maxX;
-    private float minY;
-    private float maxY;
-
-    private final transient Laboratory<Salesman> lab;
+    private final transient Laboratory<Graph> lab;
 
     //constructor
 
-    Panel(Laboratory<Salesman> lab) {
+    Panel(Laboratory<Graph> lab) {
         this.lab = lab;
         this.setPreferredSize(new Dimension(Data.DEFAULT_WIDTH, Data.DEFAULT_HEIGHT));
         this.setBackground(Data.BACKGROUND_COLOR);
-        this.computeData();
     }
 
     //functions
-
-    private void computeData() {
-        minX = Float.MAX_VALUE;
-        maxX = Float.MIN_VALUE;
-        minY = Float.MAX_VALUE;
-        maxY = Float.MIN_VALUE;
-        for (byte c = 0; c < Data.DATA_SIZE; c++) {
-            minX = Math.min(minX, Data.cityPosition(c)[1]);
-            maxX = Math.max(maxX, Data.cityPosition(c)[1]);
-            minY = Math.min(minY, Data.cityPosition(c)[0]);
-            maxY = Math.max(maxY, Data.cityPosition(c)[0]);
-        }
-        centerX = (maxX + minX) / 2f;
-        centerY = (maxY + minY) / 2f;
-    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -97,30 +73,12 @@ class Panel extends JPanel {
     }
 
     private void paintCitiesAndPath(Graphics2D g2) {
-        float scale;
-        if (w / (maxX - minX) > h / (maxY - minY)) {
-            scale = (maxY - minY) / (h * (1f - 2 * Data.GRAPH_MARGIN));
-        } else {
-            scale = (maxX - minX) / (w * (1f - 2 * Data.GRAPH_MARGIN));
-        }
+        float scale = Math.max(Data.MAX_Y / (h * (1f - 2 * Data.GRAPH_MARGIN)), Data.MAX_X / (w * (1f - 2 * Data.GRAPH_MARGIN)));
 
-
-        int[] pos;
+        Graph graph = lab.getBest();
+        short[][] positions = graph.getPositions().clone();
 
         int f = g2.getFont().getSize();
-
-        Salesman salesman = lab.getBest();
-
-        g2.setColor(Data.SALESMAN_COLOR);
-        g2.setStroke(new BasicStroke(2));
-        int[] lastPos = null;
-        for (byte c : salesman.getPath()) {
-            pos = getCityPosition(c, scale);
-            if (lastPos != null)
-                g2.drawLine(lastPos[0], lastPos[1], pos[0], pos[1]);
-            lastPos = pos;
-        }
-        g2.setStroke(new BasicStroke(1));
 
         int k = 0;
 
@@ -130,10 +88,10 @@ class Panel extends JPanel {
         g2.drawString(String.format("Mutation : %.2f%%", lab.getCurrentMutation() * 100), 10, 10 + (k++) * f);
 
         g2.setColor(Data.TEXT_MEAN_COLOR);
-        g2.drawString(String.format("Mean : %.2f km", lab.getCurrentMeanScore()), 10, 10 + (k++) * f);
+        g2.drawString(String.format("Mean : %.2f", lab.getCurrentMeanScore()), 10, 10 + (k++) * f);
 
         g2.setColor(Data.TEXT_OPTIMAL_COLOR);
-        g2.drawString(String.format("Optimal : %.2f km (generation %d)", salesman.score(), lab.getBestGeneration()), 10, 10 + (k++) * f);
+        g2.drawString(String.format("Optimal : %.2f (generation %d)", graph.score(), lab.getBestGeneration()), 10, 10 + (k++) * f);
 
         g2.setColor(Data.TEXT_INFO_COLOR);
 
@@ -142,25 +100,39 @@ class Panel extends JPanel {
         g2.drawString(String.format("Stop after %d same gen.", lab.getParams().maxStagnation), 10, 10 + (k++) * f);
         g2.drawString(lab.getParams().mutateOnlyChildren ? "Mutate only children" : "Mutate everyone but best", 10, 10 + (k++) * f);
 
-        g2.setColor(Data.CITIES_COLOR);
-        for (byte c = 0; c < Data.DATA_SIZE; c++) {
-            pos = getCityPosition(c, scale);
+        g2.setColor(Data.GRAPH_COLOR);
+
+        int[] pos;
+        int[] pos2;
+
+        for (int i = 0; i < positions.length - 1; i++) {
+            pos = getPosition(positions[i], scale);
+            for (int j = i + 1; j < positions.length; j++) {
+                pos2 = getPosition(positions[j], scale);
+                if (Data.connected(i, j))
+                    g2.drawLine(pos[0], pos[1], pos2[0], pos2[1]);
+            }
+        }
+
+        g2.setColor(Data.POINTS_COLOR);
+
+        for (int i = 0; i < positions.length; i++) {
+            pos = getPosition(positions[i], scale);
             g2.fillOval(pos[0] - 2, pos[1] - 2, 5, 5);
 
-            Rectangle2D stringBounds = g2.getFontMetrics().getStringBounds(Data.CITY_NAMES[c], g2);
-            g2.drawString(Data.CITY_NAMES[c], (int) (pos[0] - (stringBounds.getWidth()) / 2), (int) (pos[1] - stringBounds.getHeight()));
+            Rectangle2D stringBounds = g2.getFontMetrics().getStringBounds(i + "", g2);
+            g2.drawString(i + "", (int) (pos[0] - (stringBounds.getWidth()) / 2), (int) (pos[1] - stringBounds.getHeight()));
         }
 
 
     }
 
-    private int[] getCityPosition(byte city, float scale) {
+    private int[] getPosition(short[] position, float scale) {
         int wCenterX = w / 2;
         int wCenterY = h / 2;
-        int x = Math.round(wCenterX + (Data.cityPosition(city)[1] - centerX) / scale);
-        int y = Math.round(wCenterY + (Data.cityPosition(city)[0] - centerY) / -scale);
+        int x = (int) Math.round(wCenterX + (position[0] - Data.MAX_X / 2d) / scale);
+        int y = (int) Math.round(wCenterY + (position[1] - Data.MAX_Y / 2d) / scale);
         return new int[]{x, y};
     }
-
 
 }

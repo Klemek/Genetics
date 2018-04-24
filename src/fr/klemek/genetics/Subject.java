@@ -6,7 +6,5 @@ public interface Subject {
 
     void mutate(int level);
 
-    boolean valid();
-
     Subject[] createChildren(Subject other);
 }

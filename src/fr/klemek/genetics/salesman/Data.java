@@ -1,5 +1,6 @@
 package fr.klemek.genetics.salesman;
 
+import fr.klemek.genetics.LaboratoryParameters;
 import fr.klemek.genetics.Pair;
 import fr.klemek.genetics.Utils;
 
@@ -18,11 +19,15 @@ final class Data {
 
     private static final boolean APPROXIMATE = false;
 
-    static final int POPULATION_SIZE = 10000;
-    static final float DEFAULT_MUTATION = .3f;
-    static final int HIGH_STAGNATION = 25;
-    static final int MAX_STAGNATION = 50;
-    static final boolean MUTATE_ONLY_CHILDREN = true;
+    static final LaboratoryParameters PARAMETERS = new LaboratoryParameters(
+            10000, //Population size
+            true, //Best lowest
+            true, //Mutate only children
+            3.f, //Default mutation
+            25, //High stagnation
+            50, //Max stagnation
+            LaboratoryParameters.NO_THRESHOLD, //Stop threshold
+            false); //Verbose
 
     static final float RELOAD_THRESHOLD = 3095.95f; //0 for once or set for retry on fail
 
@@ -108,6 +113,15 @@ final class Data {
             positions.put(city, Utils.coordinatesToKm(CITY_COORDINATES[city], APPROXIMATE));
         return positions.get(city);
     }
+
+    /*
+     * PANEL
+     */
+
+    static final int DEFAULT_WIDTH = 800;
+    static final int DEFAULT_HEIGHT = 600;
+
+    static final float GRAPH_MARGIN = 0.1f;
 
     /*
      * COLORS

@@ -1,6 +1,7 @@
 package fr.klemek.genetics;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -78,6 +79,10 @@ public final class Utils {
 
     private static final int EARTH_RADIUS = 6371; //km
 
+    public static float distance(float ax, float ay, float bx, float by) {
+        return distance(new float[]{bx - ax, by - ay});
+    }
+
     private static float distance(float[] coords1, float[] coords2) {
         return distance(new float[]{coords2[0] - coords1[0], coords2[1] - coords1[1]});
     }
@@ -115,14 +120,18 @@ public final class Utils {
         return new float[]{x, y};
     }
 
+    public static boolean intersect(float ax, float ay, float bx, float by, float cx, float cy, float dx, float dy) {
+        return (new Line2D.Double(ax, ay, bx, by)).intersectsLine(cx, cy, dx, dy);
+    }
+
     /*
      * RANDOM
      */
 
-    public static int randInt(int min, int max, int excluded) {
+    public static int randInt(int start, int stop, int excluded) {
         int out;
         do {
-            out = ThreadLocalRandom.current().nextInt(min, max);
+            out = ThreadLocalRandom.current().nextInt(start, stop);
         } while (out == excluded);
         return out;
     }
@@ -131,6 +140,9 @@ public final class Utils {
         return ThreadLocalRandom.current().nextFloat() < successPercentage;
     }
 
+    public static short randShort(short start, short stop) {
+        return (short) ThreadLocalRandom.current().nextInt(start, stop);
+    }
     /*
      * COLOR
      */
@@ -152,5 +164,19 @@ public final class Utils {
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new UnsupportedOperationException("No default constructor found in class " + c.getSimpleName());
         }
+    }
+
+    public static boolean distinct(int... indexes) {
+        for (int i = 0; i < indexes.length - 1; i++)
+            for (int j = i + 1; j < indexes.length; j++)
+                if (indexes[i] == indexes[j])
+                    return false;
+        return true;
+    }
+
+    static boolean compare(boolean lowest, float val, float ref) {
+        if (lowest)
+            return val < ref;
+        return val > ref;
     }
 }

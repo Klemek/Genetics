@@ -34,10 +34,7 @@ class Window extends JFrame {
         Data.loadDistances();
 
         do {
-            lab = new Laboratory<>(Salesman.class,
-                    Data.POPULATION_SIZE, Data.DEFAULT_MUTATION,
-                    Data.HIGH_STAGNATION, Data.MAX_STAGNATION,
-                    Data.MUTATE_ONLY_CHILDREN);
+            lab = new Laboratory<>(Salesman.class, Data.PARAMETERS);
 
             if (w == null)
                 w = new Window(lab);

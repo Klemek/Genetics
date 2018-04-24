@@ -13,7 +13,6 @@ public class Salesman implements Subject {
     private final byte[] path;
 
     private float distance;
-    private boolean valid;
 
     //constructors
 
@@ -25,11 +24,9 @@ public class Salesman implements Subject {
         if (empty) {
             this.path = new byte[Data.DATA_SIZE];
             Utils.fill(this.path, (byte) -1);
-            this.valid = false;
         } else {
             this.path = Utils.indexes((byte) Data.DATA_SIZE);
             Utils.shuffle(this.path);
-            this.valid = true;
         }
         this.distance = 0f;
     }
@@ -45,7 +42,6 @@ public class Salesman implements Subject {
     private void setCity(int place, byte city) {
         this.path[place] = city;
         this.distance = 0f;
-        this.valid = false;
     }
 
     private int getCityPlace(byte city) {
@@ -57,8 +53,6 @@ public class Salesman implements Subject {
     }
 
     private float distance() {
-        if (!valid())
-            return 0f;
         if (distance != 0)
             return distance;
         distance = 0f;
@@ -77,30 +71,12 @@ public class Salesman implements Subject {
     //interface methods
 
     @Override
-    public boolean valid() {
-        if (valid)
-            return true;
-        valid = true;
-        ArrayList<Byte> past = new ArrayList<>();
-        for (byte city : this.path) {
-            if (city < 0 || city >= Data.DATA_SIZE || past.contains(city)) {
-                valid = false;
-                break;
-            }
-            past.add(city);
-        }
-        return valid;
-    }
-
-    @Override
     public float score() {
         return this.distance();
     }
 
     @Override
     public void mutate(int level) {
-        if (!this.valid())
-            return;
         int place1;
         int place2;
         for (int i = 0; i < level; i++) {
@@ -167,8 +143,6 @@ public class Salesman implements Subject {
                     }
         }
 
-        if (children[0] != null && children[0].valid() && children[1] != null && children[1].valid())
-            return children;
-        return new Salesman[0];
+        return children;
     }
 }
