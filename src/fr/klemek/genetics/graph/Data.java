@@ -65,8 +65,6 @@ final class Data {
      * PANEL
      */
 
-    static final int DEFAULT_WIDTH = 800;
-    static final int DEFAULT_HEIGHT = 600;
 
     static final float GRAPH_MARGIN = 0.1f;
 
@@ -74,20 +72,8 @@ final class Data {
      * COLORS
      */
 
-    static final Color BACKGROUND_COLOR = Color.WHITE;
-
     static final Color POINTS_COLOR = Utils.colorFromHex("#263238");
 
     static final Color GRAPH_COLOR = Utils.colorFromHex("#37474F");
 
-    static final Color TEXT_OPTIMAL_COLOR = Utils.colorFromHex("#F44336");
-    static final Color GRAPH_OPTIMAL_COLOR = Utils.colorFromHex("#EF5350");
-
-    static final Color TEXT_MEAN_COLOR = Utils.colorFromHex("#E91E63");
-    static final Color GRAPH_MEAN_COLOR = Utils.colorFromHex("#EC407A");
-
-    static final Color TEXT_MUTATION_COLOR = Utils.colorFromHex("#4CAF50");
-    static final Color GRAPH_MUTATION_COLOR = Utils.colorFromHex("#66BB6A");
-
-    static final Color TEXT_INFO_COLOR = Utils.colorFromHex("#9E9E9E");
 }
