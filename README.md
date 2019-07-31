@@ -2,11 +2,17 @@
 
 Messing around with genetic algorithms
 
+Properties `src/main/resources/config.properties` (or edit inside JAR / override by placing file in the same folder)
+
 ## Traveling Salesman
 
-Launch `fr.klemek.genetics.salesman.Window`
+```
+mvn clean package -P salesman
+```
 
-Parameters `fr.klemek.genetics.salesman.Data`
+Launch `fr.klemek.genetics.salesman.Window`
+Parameters `src/main/resources/salesman.properties`
+Data `src/main/resources/cities.csv`
 
 ![preview](img1.png)
 
@@ -14,8 +20,12 @@ Parameters `fr.klemek.genetics.salesman.Data`
 
 ## Not-intersecting graph
 
-Launch `fr.klemek.genetics.graph.Window`
+```
+mvn clean package -P graph
+```
 
-Parameters `fr.klemek.genetics.graph.Data`
+Launch `fr.klemek.genetics.graph.Window`
+Parameters `src/main/resources/graph.properties`
+Data `src/main/resources/graph.csv`
 
 ![preview](img3.png)

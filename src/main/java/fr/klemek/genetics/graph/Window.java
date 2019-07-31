@@ -1,15 +1,21 @@
 package fr.klemek.genetics.graph;
 
-import fr.klemek.genetics.LabPanel;
-import fr.klemek.genetics.LabWindow;
-import fr.klemek.genetics.Laboratory;
+import fr.klemek.genetics.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.*;
-
 class Window extends JFrame implements LabWindow<Graph> {
+
+    private static final ConfigFile config = new ConfigFile("graph.properties");
+
+    private static final float graphMargin = config.getFloat("GRAPH_MARGIN");
+    private static final int frameWait = 1000 / config.getInt("FRAME_PER_SECOND");
+    private static final int generationPerSecond = config.getInt("GENERATION_PER_SECOND");
+    private static final int threadSleep = generationPerSecond <= 0 ? 0 : (1000 / generationPerSecond);
+    private static final float maxX = config.getFloat("MAX_X");
+    private static final float maxY = config.getFloat("MAX_Y");
 
     private LabPanel<Graph> p;
 
@@ -36,13 +42,37 @@ class Window extends JFrame implements LabWindow<Graph> {
         return String.format("%.2f", best.score());
     }
 
+    public static void main(String[] args) throws InterruptedException {
+
+        Utils.loadData();
+
+        Laboratory<Graph> lab = new Laboratory<>(Graph.class, new LaboratoryParameters(config));
+
+        Window w = new Window(lab);
+
+        long t0 = System.currentTimeMillis();
+
+        while (!lab.shouldStop() && lab.getGeneration() < 1000) {
+            lab.nextGeneration();
+            if (System.currentTimeMillis() > t0 + frameWait) {
+                t0 = System.currentTimeMillis();
+                w.repaint();
+                Thread.sleep(3); //avoid visual glitches
+            }
+
+            if (generationPerSecond > 0) {
+                Thread.sleep(threadSleep);
+            }
+        }
+    }
+
     @Override
     public void paintCustom(Graphics2D g2, int w, int h, Graph graph) {
-        float scale = Math.max(Data.MAX_Y / (h * (1f - 2 * Data.GRAPH_MARGIN)), Data.MAX_X / (w * (1f - 2 * Data.GRAPH_MARGIN)));
+        float scale = Math.max(maxY / (h * (1f - 2 * graphMargin)), maxX / (w * (1f - 2 * graphMargin)));
 
         short[][] positions = graph.getPositions().clone();
 
-        g2.setColor(Data.GRAPH_COLOR);
+        g2.setColor(config.getColor("GRAPH_COLOR"));
 
         int[] pos;
         int[] pos2;
@@ -51,12 +81,12 @@ class Window extends JFrame implements LabWindow<Graph> {
             pos = getPosition(w, h, positions[i], scale);
             for (int j = i + 1; j < positions.length; j++) {
                 pos2 = getPosition(w, h, positions[j], scale);
-                if (Data.connected(i, j))
+                if (Utils.connected(i, j))
                     g2.drawLine(pos[0], pos[1], pos2[0], pos2[1]);
             }
         }
 
-        g2.setColor(Data.POINTS_COLOR);
+        g2.setColor(config.getColor("POINTS_COLOR"));
 
         for (int i = 0; i < positions.length; i++) {
             pos = getPosition(w, h, positions[i], scale);
@@ -70,30 +100,8 @@ class Window extends JFrame implements LabWindow<Graph> {
     private int[] getPosition(int w, int h, short[] position, float scale) {
         int wCenterX = w / 2;
         int wCenterY = h / 2;
-        int x = (int) Math.round(wCenterX + (position[0] - Data.MAX_X / 2d) / scale);
-        int y = (int) Math.round(wCenterY + (position[1] - Data.MAX_Y / 2d) / scale);
+        int x = (int) Math.round(wCenterX + (position[0] - maxX / 2d) / scale);
+        int y = (int) Math.round(wCenterY + (position[1] - maxY / 2d) / scale);
         return new int[]{x, y};
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-
-        Laboratory<Graph> lab = new Laboratory<>(Graph.class, Data.PARAMETERS);
-
-        Window w = new Window(lab);
-
-        long t0 = System.currentTimeMillis();
-
-        while (!lab.shouldStop() && lab.getGeneration() < 1000) {
-            lab.nextGeneration();
-            if (System.currentTimeMillis() > t0 + Data.FRAME_WAIT) {
-                t0 = System.currentTimeMillis();
-                w.repaint();
-                Thread.sleep(3); //avoid visual glitches
-            }
-
-            if (Data.GENERATION_PER_SECOND > 0) {
-                Thread.sleep(Data.THREAD_SLEEP);
-            }
-        }
     }
 }

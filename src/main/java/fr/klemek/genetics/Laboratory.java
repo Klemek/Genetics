@@ -42,11 +42,11 @@ public class Laboratory<T extends Subject> {
         return generation;
     }
 
-    public int getBestGeneration() {
+    int getBestGeneration() {
         return generation - stagnation;
     }
 
-    public List<Float> getBestScoreHistory() {
+    List<Float> getBestScoreHistory() {
         return bestScoreHistory;
     }
 
@@ -54,23 +54,23 @@ public class Laboratory<T extends Subject> {
         return bestScoreHistory.get(bestScoreHistory.size() - 1);
     }
 
-    public List<Float> getMeanScoreHistory() {
+    List<Float> getMeanScoreHistory() {
         return meanScoreHistory;
     }
 
-    public float getCurrentMeanScore() {
+    float getCurrentMeanScore() {
         return meanScoreHistory.get(meanScoreHistory.size() - 1);
     }
 
-    public List<Float> getMutationHistory() {
+    List<Float> getMutationHistory() {
         return mutationHistory;
     }
 
-    public float getCurrentMutation() {
+    float getCurrentMutation() {
         return mutationHistory.get(mutationHistory.size() - 1);
     }
 
-    public LaboratoryParameters getParams() {
+    LaboratoryParameters getParams() {
         return params;
     }
 

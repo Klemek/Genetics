@@ -1,7 +1,6 @@
 package fr.klemek.genetics.salesman;
 
 import fr.klemek.genetics.Subject;
-import fr.klemek.genetics.Utils;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,10 +21,10 @@ public class Salesman implements Subject {
 
     private Salesman(boolean empty) {
         if (empty) {
-            this.path = new byte[Data.DATA_SIZE];
+            this.path = new byte[Utils.dataSize];
             Utils.fill(this.path, (byte) -1);
         } else {
-            this.path = Utils.indexes((byte) Data.DATA_SIZE);
+            this.path = Utils.indexes((byte) Utils.dataSize);
             Utils.shuffle(this.path);
         }
         this.distance = 0f;
@@ -57,7 +56,7 @@ public class Salesman implements Subject {
             return distance;
         distance = 0f;
         for (int i = 1; i < this.path.length; i++)
-            distance += Data.distanceBetweenCities(this.path[i - 1], this.path[i]);
+            distance += Utils.distanceBetweenCities(this.path[i - 1], this.path[i]);
         return distance;
     }
 
@@ -80,8 +79,8 @@ public class Salesman implements Subject {
         int place1;
         int place2;
         for (int i = 0; i < level; i++) {
-            place1 = ThreadLocalRandom.current().nextInt(Data.DATA_SIZE);
-            place2 = Utils.randInt(0, Data.DATA_SIZE, place1);
+            place1 = ThreadLocalRandom.current().nextInt(Utils.dataSize);
+            place2 = Utils.randInt(0, Utils.dataSize, place1);
             this.swapCities(place1, place2);
         }
         this.distance = 0f;
@@ -97,14 +96,14 @@ public class Salesman implements Subject {
         Salesman[] children = new Salesman[]{new Salesman(true), new Salesman(true)};
 
         //generate cuts
-        int cut1 = ThreadLocalRandom.current().nextInt(0, Data.DATA_SIZE - 1);
-        int cut2 = ThreadLocalRandom.current().nextInt(cut1 + 1, Data.DATA_SIZE);
+        int cut1 = ThreadLocalRandom.current().nextInt(0, Utils.dataSize - 1);
+        int cut2 = ThreadLocalRandom.current().nextInt(cut1 + 1, Utils.dataSize);
 
         //fill children from parents
         ArrayList<Byte> specChild0 = new ArrayList<>();
         ArrayList<Byte> specChild1 = new ArrayList<>();
 
-        for (int i = 0; i < Data.DATA_SIZE; i++) {
+        for (int i = 0; i < Utils.dataSize; i++) {
             if (i < cut1 || i >= cut2) {
                 children[0].setCity(i, this.getCity(i));
                 children[1].setCity(i, other.getCity(i));
@@ -118,7 +117,7 @@ public class Salesman implements Subject {
         }
 
         //remove invalid data
-        for (int i = 0; i < Data.DATA_SIZE; i++) {
+        for (int i = 0; i < Utils.dataSize; i++) {
             if (i < cut1 || i >= cut2) {
                 if (specChild0.contains(children[0].getCity(i)))
                     children[0].setCity(i, (byte) -1);
@@ -128,15 +127,15 @@ public class Salesman implements Subject {
         }
 
         //fix missing data
-        for (byte c = 0; c < Data.DATA_SIZE; c++) {
+        for (byte c = 0; c < Utils.dataSize; c++) {
             if (children[0].getCityPlace(c) == -1)
-                for (int i = 0; i < Data.DATA_SIZE; i++)
+                for (int i = 0; i < Utils.dataSize; i++)
                     if (children[0].getCity(i) == -1) {
                         children[0].setCity(i, c);
                         break;
                     }
             if (children[1].getCityPlace(c) == -1)
-                for (int i = 0; i < Data.DATA_SIZE; i++)
+                for (int i = 0; i < Utils.dataSize; i++)
                     if (children[1].getCity(i) == -1) {
                         children[1].setCity(i, c);
                         break;

@@ -1,4 +1,4 @@
-package fr.klemek.genetics;
+package fr.klemek.genetics.salesman;
 
 import org.junit.Test;
 
@@ -10,12 +10,12 @@ public class UtilsTest {
     public void geoDistance() {
         float realDist = 793.8f;
 
-        float distApp = Utils.geoDistance(new float[]{43.42f, 7.16f}, new float[]{49.26f, 1.05f}, true);
+        float distApp = Utils.geoDistance(new float[]{43.42f, 7.16f}, new float[]{49.26f, 1.05f});
 
         assertGreater(realDist * 0.9f, distApp);
         assertLesser(realDist * 1.1f, distApp);
 
-        float dist = Utils.geoDistance(new float[]{43.42f, 7.16f}, new float[]{49.26f, 1.05f}, false);
+        float dist = Utils.geoDistance(new float[]{43.42f, 7.16f}, new float[]{49.26f, 1.05f});
 
         assertGreater(realDist * 0.99f, dist);
         assertLesser(realDist * 1.01f, dist);

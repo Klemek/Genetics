@@ -1,9 +1,8 @@
 package fr.klemek.genetics;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-
-import javax.swing.*;
 
 public class LabPanel<T extends Subject> extends JPanel {
 
@@ -15,13 +14,15 @@ public class LabPanel<T extends Subject> extends JPanel {
     private final transient Laboratory<T> lab;
     private final transient LabWindow<T> window;
 
+    private final ConfigFile config = new ConfigFile("config.properties");
+
     //constructor
 
     public LabPanel(Laboratory<T> lab, LabWindow<T> window) {
         this.lab = lab;
         this.window = window;
-        this.setPreferredSize(new Dimension(GeneralData.DEFAULT_WIDTH, GeneralData.DEFAULT_HEIGHT));
-        this.setBackground(GeneralData.BACKGROUND_COLOR);
+        this.setPreferredSize(new Dimension(config.getInt("DEFAULT_WIDTH"), config.getInt("DEFAULT_HEIGHT")));
+        this.setBackground(config.getColor("BACKGROUND_COLOR"));
     }
 
     //functions
@@ -34,16 +35,16 @@ public class LabPanel<T extends Subject> extends JPanel {
 
         this.w = this.getWidth();
         if (this.w == 0)
-            this.w = GeneralData.DEFAULT_WIDTH;
+            this.w = config.getInt("DEFAULT_WIDTH");
         this.h = this.getHeight();
         if (this.h == 0)
-            this.h = GeneralData.DEFAULT_HEIGHT;
+            this.h = config.getInt("DEFAULT_HEIGHT");
 
-        g2.setColor(GeneralData.GRAPH_MUTATION_COLOR);
+        g2.setColor(config.getColor("GRAPH_MUTATION_COLOR"));
         paintGraph(g2, lab.getMutationHistory(), 1f);
-        g2.setColor(GeneralData.GRAPH_MEAN_COLOR);
+        g2.setColor(config.getColor("GRAPH_MEAN_COLOR"));
         paintGraph(g2, lab.getMeanScoreHistory(), lab.getMeanScoreHistory().get(0));
-        g2.setColor(GeneralData.GRAPH_OPTIMAL_COLOR);
+        g2.setColor(config.getColor("GRAPH_OPTIMAL_COLOR"));
         paintGraph(g2, lab.getBestScoreHistory(), lab.getMeanScoreHistory().get(0));
 
         Font font = new Font("Arial", Font.BOLD, 12);
@@ -55,21 +56,21 @@ public class LabPanel<T extends Subject> extends JPanel {
 
         g2.drawString(String.format("Generation %d", lab.getGeneration()), 10, 10 + (k++) * f);
 
-        g2.setColor(GeneralData.TEXT_MUTATION_COLOR);
+        g2.setColor(config.getColor("TEXT_MUTATION_COLOR"));
         g2.drawString(String.format("Mutation : %.2f%%", lab.getCurrentMutation() * 100), 10, 10 + (k++) * f);
 
-        g2.setColor(GeneralData.TEXT_MEAN_COLOR);
+        g2.setColor(config.getColor("TEXT_MEAN_COLOR"));
         g2.drawString(String.format("Mean : %.2f", lab.getCurrentMeanScore()), 10, 10 + (k++) * f);
 
-        g2.setColor(GeneralData.TEXT_OPTIMAL_COLOR);
+        g2.setColor(config.getColor("TEXT_OPTIMAL_COLOR"));
         g2.drawString(String.format("Optimal : %s (generation %d)", window.getBestDescription(lab.getBest()), lab.getBestGeneration()), 10, 10 + (k++) * f);
 
-        g2.setColor(GeneralData.TEXT_INFO_COLOR);
+        g2.setColor(config.getColor("TEXT_INFO_COLOR"));
 
         g2.drawString(String.format("Population : %d", lab.getParams().populationSize), 10, 10 + (k++) * f);
         g2.drawString(String.format("High mutation after %d same gen.", lab.getParams().highStagnation), 10, 10 + (k++) * f);
         g2.drawString(String.format("Stop after %d same gen.", lab.getParams().maxStagnation), 10, 10 + (k++) * f);
-        g2.drawString(lab.getParams().mutateOnlyChildren ? "Mutate only children" : "Mutate everyone but best", 10, 10 + (k++) * f);
+        g2.drawString(lab.getParams().mutateOnlyChildren ? "Mutate only children" : "Mutate everyone but best", 10, 10 + (k) * f);
 
         window.paintCustom(g2, w, h, lab.getBest());
     }

@@ -2,13 +2,21 @@ package fr.klemek.genetics;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class Utils {
+public class Utils {
 
-    private Utils() {
+    protected Utils() {
 
     }
 
@@ -55,8 +63,7 @@ public final class Utils {
     }
 
     public static void fill(byte[] array, byte value) {
-        for (int i = 0; i < array.length; i++)
-            array[i] = value;
+        Arrays.fill(array, value);
     }
 
     public static int indexOf(byte[] array, byte value) {
@@ -71,53 +78,16 @@ public final class Utils {
      * COORDINATES
      */
 
-    private static final float LATITUTE_FACTOR = 110.574f;
-    private static final float LONGITUTE_FACTOR = 111.320f;
-
-    private static final float LATITUTE_FACTOR_APPROX = 918f / 11.93f;
-    private static final float LONGITUTE_FACTOR_APPROX = 881f / 7.98f;
-
-    private static final int EARTH_RADIUS = 6371; //km
-
     public static float distance(float ax, float ay, float bx, float by) {
         return distance(new float[]{bx - ax, by - ay});
     }
 
-    private static float distance(float[] coords1, float[] coords2) {
+    protected static float distance(float[] coords1, float[] coords2) {
         return distance(new float[]{coords2[0] - coords1[0], coords2[1] - coords1[1]});
-    }
-
-    public static float geoDistance(float[] coords1, float[] coords2, boolean approximate) {
-        if (approximate)
-            return distance(coordinatesToKm(coords1, true), coordinatesToKm(coords2, true));
-
-        double phi1 = Math.toRadians(coords1[0]);
-        double phi2 = Math.toRadians(coords2[0]);
-        double dPhi = Math.toRadians(coords2[0] - coords1[0]);
-        double dLambda = Math.toRadians(coords2[1] - coords1[1]);
-        double a = Math.sin(dPhi / 2d) * Math.sin(dPhi / 2d)
-                + Math.cos(phi1) * Math.cos(phi2)
-                * Math.sin(dLambda / 2d) * Math.sin(dLambda / 2d);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return (float) (EARTH_RADIUS * c);
     }
 
     private static float distance(float[] coords) {
         return (float) Math.sqrt(Math.pow(coords[0], 2) + Math.pow(coords[1], 2));
-    }
-
-    public static float[] coordinatesToKm(float[] coordinates, boolean approximate) {
-        float x;
-        float y;
-        if (approximate) {
-            x = coordinates[0] * LATITUTE_FACTOR_APPROX;
-            y = coordinates[1] * LONGITUTE_FACTOR_APPROX;
-        } else {
-            x = coordinates[0] * LATITUTE_FACTOR;
-            y = (float) (coordinates[1] * LONGITUTE_FACTOR * Math.cos(Math.toRadians(coordinates[0])));
-        }
-        return new float[]{x, y};
     }
 
     public static boolean intersect(float ax, float ay, float bx, float by, float cx, float cy, float dx, float dy) {
@@ -147,7 +117,7 @@ public final class Utils {
      * COLOR
      */
 
-    public static Color colorFromHex(String hex) {
+    static Color colorFromHex(String hex) {
         return new Color(
                 Integer.valueOf(hex.substring(1, 3), 16),
                 Integer.valueOf(hex.substring(3, 5), 16),
@@ -178,5 +148,28 @@ public final class Utils {
         if (lowest)
             return val < ref;
         return val > ref;
+    }
+
+    private static String[] readFile(String resourceName) {
+        try (InputStream is = Utils.class.getClassLoader().getResourceAsStream(resourceName)) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is), StandardCharsets.UTF_8))) {
+                ArrayList<String> lines = new ArrayList<>();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    lines.add(line);
+                }
+                return lines.toArray(new String[0]);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(resourceName + ": unable to read file: " + e.getMessage());
+        }
+    }
+
+    public static String[][] readCSV(String resourceName) {
+        String[] lines = Utils.readFile(resourceName);
+        String[][] data = new String[lines.length][];
+        for (int i = 0; i < data.length; i++)
+            data[i] = lines[i].split(";");
+        return data;
     }
 }
