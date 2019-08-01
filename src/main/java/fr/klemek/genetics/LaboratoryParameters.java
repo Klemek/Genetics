@@ -14,7 +14,9 @@ public class LaboratoryParameters {
     final boolean verbose;
 
     public LaboratoryParameters(ConfigFile config) {
-        this.populationSize = config.getInt("populationSize") + (4 - config.getInt("populationSize") % 4);
+        this.populationSize = config.getInt("populationSize");
+        if(this.populationSize % 4 != 0)
+            throw new RuntimeException("Population size is not divisible by 4");
         this.bestLowest = config.getBoolean("bestLowest");
         this.mutateOnlyChildren = config.getBoolean("mutateOnlyChildren");
         this.defaultMutation = config.getFloat("defaultMutation");
