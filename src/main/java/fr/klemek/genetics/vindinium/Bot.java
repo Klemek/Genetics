@@ -181,8 +181,10 @@ public class Bot implements Subject {
             });
             int[] score = runner.run();
             int[] places = ArrayUtils.clone(score);
+            Arrays.sort(places);
             for (int i = 0; i < 4; i++) {
                 bots[i].matches++;
+                if(score[i] == 0) continue; // not points for you
                 int place = ArrayUtils.indexOf(places, score[i]);
                 switch (place) {
                     case 0:
