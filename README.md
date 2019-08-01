@@ -7,11 +7,11 @@ Properties `src/main/resources/config.properties` (or edit inside JAR / override
 ## Traveling Salesman
 
 ```
-mvn clean package -P salesman
+mvn clean package -P bot
 ```
 
-* Launch `fr.klemek.genetics.salesman.Window`
-* Parameters `src/main/resources/salesman.properties`
+* Launch `fr.klemek.genetics.bot.Window`
+* Parameters `src/main/resources/bot.properties`
 * Data `src/main/resources/cities.csv`
 
 ![preview](img1.png)

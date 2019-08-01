@@ -17,6 +17,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
         <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -84,7 +89,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                            <includeScope>runtime</includeScope>
+                            <includeScope>compile</includeScope>
                         </configuration>
                     </execution>
                 </executions>
@@ -113,9 +118,39 @@
 
     <profiles>
         <profile>
-            <id>salesman</id>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.codingame.gameengine</groupId>
+                    <artifactId>core</artifactId>
+                    <version>3.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.codingame.gameengine</groupId>
+                    <artifactId>module-entities</artifactId>
+                    <version>3.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.codingame.gameengine</groupId>
+                    <artifactId>runner</artifactId>
+                    <version>3.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.codingame.game</groupId>
+                    <artifactId>vindinium</artifactId>
+                    <version>1.0</version>
+                    <scope>system</scope>
+                    <systemPath>${project.basedir}/lib/vindinium-1.0.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>bot</id>
             <properties>
-                <project.build.mainClass>fr.klemek.genetics.salesman.Window</project.build.mainClass>
+                <project.build.mainClass>fr.klemek.genetics.bot.Window</project.build.mainClass>
             </properties>
         </profile>
         <profile>
@@ -123,6 +158,36 @@
             <properties>
                 <project.build.mainClass>fr.klemek.genetics.graph.Window</project.build.mainClass>
             </properties>
+        </profile>
+        <profile>
+            <id>vindinium</id>
+            <properties>
+                <project.build.mainClass>fr.klemek.genetics.vindinium.Window</project.build.mainClass>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.codingame.gameengine</groupId>
+                    <artifactId>core</artifactId>
+                    <version>3.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.codingame.gameengine</groupId>
+                    <artifactId>module-entities</artifactId>
+                    <version>3.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.codingame.gameengine</groupId>
+                    <artifactId>runner</artifactId>
+                    <version>3.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.codingame.game</groupId>
+                    <artifactId>vindinium</artifactId>
+                    <version>1.0</version>
+                    <scope>system</scope>
+                    <systemPath>${project.basedir}/lib/vindinium-1.0.jar</systemPath>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 

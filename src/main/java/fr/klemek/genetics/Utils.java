@@ -1,5 +1,7 @@
 package fr.klemek.genetics;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
@@ -9,7 +11,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -23,6 +24,18 @@ public class Utils {
     /*
      * ARRAYS
      */
+
+    public static <T> void shuffle(T[] ar) {
+        // Implementing Fisher–Yates shuffle
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = ar.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            T a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
+    }
 
     public static void shuffle(byte[] ar) {
         // Implementing Fisher–Yates shuffle
@@ -62,10 +75,6 @@ public class Utils {
         return out;
     }
 
-    public static void fill(byte[] array, byte value) {
-        Arrays.fill(array, value);
-    }
-
     public static int indexOf(byte[] array, byte value) {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == value)
@@ -98,11 +107,11 @@ public class Utils {
      * RANDOM
      */
 
-    public static int randInt(int start, int stop, int excluded) {
+    public static int randInt(int start, int stop, int... excluded) {
         int out;
         do {
             out = ThreadLocalRandom.current().nextInt(start, stop);
-        } while (out == excluded);
+        } while (ArrayUtils.contains(excluded, out));
         return out;
     }
 
@@ -113,11 +122,15 @@ public class Utils {
     public static short randShort(short start, short stop) {
         return (short) ThreadLocalRandom.current().nextInt(start, stop);
     }
+
+    public static float randFloat(float start, float stop) {
+        return ThreadLocalRandom.current().nextFloat() * (stop - start) + start;
+    }
     /*
      * COLOR
      */
 
-    static Color colorFromHex(String hex) {
+    public static Color colorFromHex(String hex) {
         return new Color(
                 Integer.valueOf(hex.substring(1, 3), 16),
                 Integer.valueOf(hex.substring(3, 5), 16),

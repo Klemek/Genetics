@@ -3,6 +3,7 @@ package fr.klemek.genetics.salesman;
 import fr.klemek.genetics.Subject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Salesman implements Subject {
@@ -22,7 +23,7 @@ public class Salesman implements Subject {
     private Salesman(boolean empty) {
         if (empty) {
             this.path = new byte[Utils.dataSize];
-            Utils.fill(this.path, (byte) -1);
+            Arrays.fill(this.path, (byte) -1);
         } else {
             this.path = Utils.indexes((byte) Utils.dataSize);
             Utils.shuffle(this.path);

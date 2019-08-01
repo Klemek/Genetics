@@ -74,6 +74,10 @@ public class Laboratory<T extends Subject> {
         return params;
     }
 
+    public Subject[] getPopulation() {
+        return population;
+    }
+
     //functions
 
     public void nextGeneration() {

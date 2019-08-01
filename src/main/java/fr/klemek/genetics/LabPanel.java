@@ -50,6 +50,8 @@ public class LabPanel<T extends Subject> extends JPanel {
         Font font = new Font("Arial", Font.BOLD, 12);
         g2.setFont(font);
 
+        window.paintCustom(g2, w, h, lab.getBest());
+
         int f = g2.getFont().getSize();
 
         int k = 0;
@@ -71,8 +73,6 @@ public class LabPanel<T extends Subject> extends JPanel {
         g2.drawString(String.format("High mutation after %d same gen.", lab.getParams().highStagnation), 10, 10 + (k++) * f);
         g2.drawString(String.format("Stop after %d same gen.", lab.getParams().maxStagnation), 10, 10 + (k++) * f);
         g2.drawString(lab.getParams().mutateOnlyChildren ? "Mutate only children" : "Mutate everyone but best", 10, 10 + (k) * f);
-
-        window.paintCustom(g2, w, h, lab.getBest());
     }
 
     private void paintGraph(Graphics2D g2, List<Float> graph, double max) {
