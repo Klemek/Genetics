@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 final class Utils extends fr.klemek.genetics.Utils {
 
-    private static final ConfigFile config = new ConfigFile("salesman.properties");
+    private static final ConfigFile config = new ConfigFile("salesman");
     private static final boolean approximate = config.getBoolean("APPROXIMATE");
     private static final float LATITUTE_FACTOR = 110.574f;
 

@@ -4,7 +4,7 @@ import fr.klemek.genetics.ConfigFile;
 
 final class Utils extends fr.klemek.genetics.Utils {
 
-    private static final ConfigFile config = new ConfigFile("graph.properties");
+    private static final ConfigFile config = new ConfigFile("graph");
     static int graphSize;
 
     /*

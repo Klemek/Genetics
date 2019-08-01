@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Bot implements Subject {
 
-    private static final ConfigFile config = new ConfigFile("vindinium.properties");
+    private static final ConfigFile config = new ConfigFile("vindinium");
     private static final int matchesPerBot = config.getInt("MATCHES");
     private static final int roundPerMatch = config.getInt("ROUNDS");
     private static final int multithread = config.getInt("MULTITHREAD");
@@ -144,7 +144,7 @@ public class Bot implements Subject {
 
             while (running > 0) {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                 }
             }

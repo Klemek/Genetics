@@ -14,7 +14,7 @@ public class LabPanel<T extends Subject> extends JPanel {
     private final transient Laboratory<T> lab;
     private final transient LabWindow<T> window;
 
-    private final ConfigFile config = new ConfigFile("config.properties");
+    private final ConfigFile config = new ConfigFile("config");
 
     //constructor
 

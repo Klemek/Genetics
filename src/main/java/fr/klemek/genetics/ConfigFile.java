@@ -1,27 +1,26 @@
 package fr.klemek.genetics;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public class ConfigFile {
 
-    private final Properties properties = new Properties();
+    private ResourceBundle bundle;
     private final String resourceName;
 
     public ConfigFile(String resourceName) {
         this.resourceName = resourceName;
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourceName)) {
-            this.properties.load(is);
-        } catch (IOException e) {
+        try {
+            this.bundle = ResourceBundle.getBundle(resourceName);
+        } catch (MissingResourceException e) {
             throw new RuntimeException(resourceName + ": unable to read property file: " + e.getMessage());
         }
     }
 
     public String get(String key) {
-        if (this.properties.containsKey(key)) {
-            return this.properties.getProperty(key);
+        if (this.bundle.containsKey(key)) {
+            return this.bundle.getString(key);
         } else {
             throw new RuntimeException(resourceName + ": key '" + key + "' not found");
         }

@@ -11,7 +11,7 @@ import java.util.List;
 
 class Window extends JFrame implements LabWindow<Bot> {
 
-    private static final ConfigFile config = new ConfigFile("vindinium.properties");
+    private static final ConfigFile config = new ConfigFile("vindinium");
 
     private static final int frameWait = 1000 / config.getInt("FRAME_PER_SECOND");
     private static final int generationPerSecond = config.getInt("GENERATION_PER_SECOND");

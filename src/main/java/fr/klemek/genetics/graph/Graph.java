@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Graph implements Subject {
 
-    private static final ConfigFile config = new ConfigFile("graph.properties");
+    private static final ConfigFile config = new ConfigFile("graph");
 
     private static final short maxX = config.getShort("MAX_X");
     private static final short maxY = config.getShort("MAX_Y");

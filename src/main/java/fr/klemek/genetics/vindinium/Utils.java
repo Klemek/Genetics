@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 final class Utils extends fr.klemek.genetics.Utils {
 
-    private static final ConfigFile config = new ConfigFile("vindinium.properties");
+    private static final ConfigFile config = new ConfigFile("vindinium");
     private static final float mutation = config.getFloat("MUTATION");
     /*
      * CITY DATA

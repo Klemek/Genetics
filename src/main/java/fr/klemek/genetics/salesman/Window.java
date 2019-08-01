@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 
 class Window extends JFrame implements LabWindow<Salesman> {
 
-    private static final ConfigFile config = new ConfigFile("salesman.properties");
+    private static final ConfigFile config = new ConfigFile("salesman");
 
     private static final float graphMargin = config.getFloat("GRAPH_MARGIN");
     private static final int frameWait = 1000 / config.getInt("FRAME_PER_SECOND");
