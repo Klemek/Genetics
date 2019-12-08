@@ -136,7 +136,7 @@
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
                     <artifactId>runner</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.10.0</version>
                 </dependency>
                 <dependency>
                     <groupId>com.codingame.game</groupId>
@@ -178,7 +178,7 @@
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
                     <artifactId>runner</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.10.0</version>
                 </dependency>
                 <dependency>
                     <groupId>com.codingame.game</groupId>
