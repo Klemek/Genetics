@@ -126,7 +126,7 @@
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
                     <artifactId>core</artifactId>
-                    <version>3.4.3</version>
+                    <version>4.4.4</version>
                 </dependency>
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
@@ -136,7 +136,7 @@
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
                     <artifactId>runner</artifactId>
-                    <version>3.10.1</version>
+                    <version>4.4.4</version>
                 </dependency>
                 <dependency>
                     <groupId>com.codingame.game</groupId>
@@ -168,7 +168,7 @@
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
                     <artifactId>core</artifactId>
-                    <version>3.4.3</version>
+                    <version>4.4.4</version>
                 </dependency>
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
@@ -178,7 +178,7 @@
                 <dependency>
                     <groupId>com.codingame.gameengine</groupId>
                     <artifactId>runner</artifactId>
-                    <version>3.10.1</version>
+                    <version>4.4.4</version>
                 </dependency>
                 <dependency>
                     <groupId>com.codingame.game</groupId>
